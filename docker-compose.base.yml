@@ -1,0 +1,16 @@
+version: "3"
+services:
+  web:
+    container_name: frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    image: clearpoint/cptodoui
+
+  api:
+    container_name: backend
+    build:
+      context: ./Backend/TodoList.Api
+      dockerfile: Dockerfile
+    image: clearpoint/cptodoapi
+

@@ -1,0 +1,26 @@
+version: "3"
+
+# docker-compose.ci.yml extends from base, not worrying about
+# networks as only for integration testing via github actions
+
+services:
+  web:
+    extends:
+      file: docker-compose.base.yml
+      service: web
+
+  api:
+    extends:
+      file: docker-compose.base.yml
+      service: api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "3002:80"
+    
+networks:
+  front:
+    name: front
+  back:
+    name: back

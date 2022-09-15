@@ -1,15 +1,36 @@
-version: "3.9"
+version: "3"
 services:
   web:
+    container_name: frontend
     build: ./Frontend
     image: cptodoui
+ #   depends_on:
+ #     - api
     ports:
       - "3000:80"
+    healthcheck:
+      test: "curl -f localhost:80"
+      interval: 5s
+      timeout: 5s
+      retries: 3
+ #   networks:
+ #     - front
+ #     - back
   api:
+    container_name: backend
     build: ./Backend/TodoList.Api
     image: cptodoapi
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-     - "3002:80"
+      - "3002:80"
+ #   networks:
+ #     - back
+
+networks:
+  front:
+    name: front
+  back:
+    name: back
 
