@@ -1,0 +1,94 @@
+name: Docker Compose Development CI
+
+on:
+  push:
+    branches:
+      - 'develop'
+# only run tests when git commit tagged with demantic version
+    tags:
+      - "*.*.*"
+  workflow_call:
+
+jobs:
+  test-frontend:
+    name: Test Frontend application
+    runs-on: ubuntu-latest
+    steps:
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "🔧 setup node"
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 16
+
+      - name: "🔧 install npm@latest"
+        run: npm i -g npm@latest yarn@latest
+
+      - name: "📦 install dependencies"
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: Frontend
+
+      - name: "🔍 run tests"
+        run: npm run test --if-present
+        working-directory: Frontend
+
+  test-fe-cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v3
+      - name: "🔧 install npm@latest"
+        run: npm i -g npm@latest yarn@latest
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: "🔍 Cypress run tests"
+        uses: cypress-io/github-action@v4.2.0 
+        container: cypress/browsers:node12.13.0-chrome78-ff70
+        with:
+          browser: chrome
+          install-command: yarn --frozen-lockfile --silent
+          config: pageLoadTimeout=10000,baseUrl=http://localhost:3000
+          working-directory: Frontend
+          build: yarn run build
+          start: yarn run start
+          wait-on: 'http://localhost:3000'
+
+      - name: "🔍 run tests"
+        run: npm run test --if-present
+        working-directory: Frontend
+
+  test-backend:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK 
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '5.0.x'
+        working-directory: Backend/TodoList.Api
+      - name: Install dependencies
+        run: dotnet restore
+        working-directory: Backend/TodoList.Api
+      - name: Build dotnet
+        run: dotnet build --configuration Release --no-restore
+        working-directory: Backend/TodoList.Api
+      - name:  "🔍  Dotnet Tests"
+        run: dotnet test --no-restore --verbosity normal
+        working-directory: Backend/TodoList.Api
+        
+    #env:
+    #  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    #  DJANGO_SETTINGS_MODULE: app_name.settings.dev
+    #  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+    #  PORT: 8000
+
+        
+   #   - name: Build the docker-compose.ci stack
+   #     run: |
+   #      docker compose -f docker-compose.ci.yml up --build --detach
+   #      sleep 10  # wait for containers to be ready
+
+   
