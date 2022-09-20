@@ -1,0 +1,6 @@
+name: '🏗 Node Lint & Build'
+
+on: workflow_call
+
+jobs:
+   test-frontend:

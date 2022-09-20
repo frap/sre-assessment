@@ -1,11 +1,15 @@
 version: "3"
+
+# docker-compose.yml extends from base which sets the base images
+# setting up the network separation between front and back ends
+
 services:
   web:
-    container_name: frontend
-    build: ./Frontend
-    image: cptodoui
- #   depends_on:
- #     - api
+    extends:
+      file: docker-compose.base.yml
+      service: web
+    depends_on:
+      - api
     ports:
       - "3000:80"
     healthcheck:
@@ -13,20 +17,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
- #   networks:
- #     - front
- #     - back
+    networks:
+      - front
+      - back
   api:
-    container_name: backend
-    build: ./Backend/TodoList.Api
-    image: cptodoapi
+    extends:
+      file: docker-compose.base.yml
+      service: api
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "3002:80"
- #   networks:
- #     - back
+    networks:
+      - back
 
 networks:
   front:

@@ -1,4 +1,5 @@
 version: "3"
+# Is the Base docker compose file whihc devleop and CI build on with their relevant extras
 services:
   web:
     container_name: frontend
