@@ -18,6 +18,27 @@ env:
   BACKEND_IMAGE:  clearpoint/backend
   
 jobs:
+  node-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "🔧 setup node"  
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+
+      - name: "🔧 install yarn@latest"
+        run: npm install -g  yarn@latest
+
+      - name: "📦 install dependencies"
+        run: npm install
+        with:
+          cache: 'dependencies'
+          working-directory: Frontend
+
   docker-frontend:
     runs-on: ubuntu-latest
     steps:
@@ -46,37 +67,18 @@ jobs:
           
   test-frontend:
     name: Test Frontend application
+    needs: node-build
     runs-on: ubuntu-latest
     steps:
-      - name: "☁️ checkout repository"
-        uses: actions/checkout@v3
-
-      - name: "🔧 setup node"
-        uses: actions/setup-node@v2
-        cache: "npm"
-        with:
-          node-version: 16
-
-      - name: "🔧 install npm@latest"
-        run: npm i -g npm@latest yarn@latest
-
-      - name: "📦 install dependencies"
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: Frontend
-
       - name: "🔍 run tests"
         run: npm run test --if-present
         working-directory: Frontend
 
   test-fe-cypress:
+    needs: node-build  
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.13.0-chrome78-ff70
     steps:
-      - name: "☁️ checkout repository"
-        uses: actions/checkout@v3
-      - name: "🔧 install npm@latest"
-        run: npm i -g npm@latest yarn@latest
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: "🔍 Cypress run tests"
@@ -91,7 +93,7 @@ jobs:
           wait-on: 'http://localhost:3000'
 
       - name: "🔍 run tests"
-        run: npm run test --if-present
+        run: npm run cypress
         working-directory: Frontend
 
   test-backend:
