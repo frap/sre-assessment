@@ -35,12 +35,13 @@ You will need an AWS account with IAM privileges
 - once pull-request is approved and merged it will be deployed to the cloud with the AWS docker-compose 
 
 ## Additional Comments
+  I dont have an AWS account to tests the Github Action to deploy to ECS via docker-compose so have no idea if it works 
 
 ### Testing
 
 I used act to test the github actions locally. As you can see there was a TDD "error" so my test flows wont complete. I didnt fix the TDD "error" as thought was aprt of process?
 
-#+begin_src bash
+```
 [agasson@TRex]> act -s GITHUB_TOKEN="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" -j "test-frontend"
 [Docker Compose Development CI/Test Frontend application]   🐳  docker exec cmd=[bash --noprofile --norc -e -o pipefail /var/run/act/workflow/4] user= workdir=Frontend
 | 
@@ -115,7 +116,7 @@ Test Suites: 1 failed, 2 passed, 3 total
 [Docker Compose Development CI/Test Frontend application]   ❌  Failure - Main 🔍 run tests
 
 
-#+end_src
+```
 
 
 
