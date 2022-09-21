@@ -1,4 +1,4 @@
-name: Deploy to AWS ECR
+name: "Deploy to AWS ECR"
 
 on:
   pull_request:
@@ -16,18 +16,19 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ci-prod-${{ github.ref }}-1
+  group: "ci-prod-${{ github.ref }}-1"
   cancel-in-progress: true
 
 env:
-  FRONTEND_IMAGE: clearpoint/frontend
-  BACKEND_IMAGE:  clearpoint/backend
-  
+  FRONTEND_IMAGE: "clearpoint/frontend"
+  BACKEND_IMAGE:  "clearpoint/backend"
+
+
 jobs:
-  deploy-ci:
+  deployaws:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
+      - name: "☁️ checkout repository"
         uses: actions/checkout@v3
 
       - name: Configure AWS credentials
@@ -57,7 +58,7 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${FRONTEND_IMAGE}-${{ github.sha }}
             ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${FRONTEND_IMAGE}-latest
 
-       - name: Build and push $FRONTEND_IMAGE
+      - name: "Build and push ${FRONTEND_IMAGE}"
         uses: docker/build-push-action@v2
         with:
           context: Backend/TodoList.Api/

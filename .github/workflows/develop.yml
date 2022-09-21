@@ -4,18 +4,18 @@ on:
   push:
     branches:
       - 'develop'
-# only run tests when git commit tagged with semantic version
+      # only run tests when git commit tagged with semantic version
     tags:
       - "*.*.*"
   workflow_call:
 
 concurrency:
-  group: ci-develop-${{ github.ref }}-1
+  grup: "ci-develop-${{ github.ref }}-1"
   cancel-in-progress: true
   
 env:
-  FRONTEND_IMAGE: clearpoint/frontend
-  BACKEND_IMAGE:  clearpoint/backend
+  FRONTEND_IMAGE: "clearpoint/frontend"
+  BACKEND_IMAGE:  "clearpoint/backend"
   
 jobs:
   node-build:
@@ -51,7 +51,7 @@ jobs:
           echo ::set-output name=tagged_image::${FRONTEND_IMAGE}:${TAG}
           echo ::set-output name=tag::${TAG}
 
-      - name: Set up Docker Buildx
+      - Name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
 
@@ -112,7 +112,7 @@ jobs:
       - name: Build dotnet
         run: dotnet build --configuration Release --no-restore
         working-directory: Backend/TodoList.Api
-      - name:  "🔍  Dotnet Tests"
+      - name: "🔍  Dotnet Tests"
         run: dotnet test --no-restore --verbosity normal
         working-directory: Backend/TodoList.Api
    
