@@ -46,11 +46,11 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Build and push $FRONTEND_IMAGE
-        uses: docker/build-push-action@v2
+      - name: "Build and push $FRONTEND_IMAGE"
+        uses: docker/build-push-action@v3
         with:
           context: Frontend/
-          file: Frontend/Dockerfile
+          #file: Frontend/Dockerfile
           push: true
           cache-from: type=gha,scope=$FRONTEND_IMAGE
           cache-to: type=gha,scope=$FRONTEND_IMAGE
@@ -62,7 +62,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: Backend/TodoList.Api/
-          file: Backend/TodoList.Api/Dockerfile
+          #file: Backend/TodoList.Api/Dockerfile
           push: true
           cache-from: type=gha,scope=$BACKEND_IMAGE
           cache-to: type=gha,scope=$BACKEND_IMAGE
