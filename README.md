@@ -30,8 +30,8 @@ we can get scale out by having multiple forntends behind an AWS load-balancer.
 ### Cloud deploy privileges from main
 You will need an AWS account with IAM privileges 
 - create docker ecs aws context `docker context create ecs ecs-context` (if you have Docker Desktop or linux version of docker)
-- store your AWS credentials ( `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` and `AWS_REGION` ) in `$HOME/.aws/credentials`.
-- Store your aws config (aka REgion ANd ECR Repository) in `$HOME/.aws/config` (`AWS_REGION` `ECR_REPOSITORY`)
+- store your AWS credentials ( `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` and `AWS_REGION` ) in `$HOME/.aws/credentials` for local development and in Github Secrets for CI merging to main and AWS ECS deployment.
+- Store your aws config (aka REgion and ECR Repository) in `$HOME/.aws/config` (`AWS_REGION` `ECR_REPOSITORY`) for local development and in Github Secrets for CI merging to main and AWS ECS deployment.
 - once pull-request is approved and merged it will be deployed to the cloud with the AWS docker-compose 
 
 ## Additional Comments
@@ -39,7 +39,7 @@ You will need an AWS account with IAM privileges
 
 ### Testing
 
-I used act to test the github actions locally. As you can see there was a TDD "error" so my test flows wont complete. I didnt fix the TDD "error" as thought was aprt of process?
+I used `act` to test the github actions locally. As you can see there was a simple TDD text "error" so my test flows wont complete. I didnt fix the missing text "frontend" error as that is part of SDLC not CI/CD?
 
 ```
 [agasson@TRex]> act -s GITHUB_TOKEN="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" -j "test-frontend"
