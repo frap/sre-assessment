@@ -10,22 +10,20 @@ jobs:
         - name: "☁️ checkout repository"
           uses: actions/checkout@v3
 
-          - name: "🔧 setup node"  
-            uses: actions/setup-node@v2
-            with:
-              node-version: '16'
-              cache: 'npm'
+        - name: "🔧 setup node"  
+          uses: actions/setup-node@v2
+          with:
+            node-version: '16'
+            cache: 'npm'
 
-          - name: "🔧 install yarn@latest"
-            run: npm install -g  yarn@latest
+        - name: "🔧 install yarn@latest"
+          run: npm install -g  yarn@latest
 
-          - name: "📦 install dependencies"
-            run: npm install
-            with:
-              cache: 'dependencies'
-              working-directory: Frontend
+        - name: "📦 install dependencies"
+          run: npm install
+          with:
+            cache: 'dependencies'
+            working-directory: Frontend
 
-          – run: npm run lint
-          – run: npm run build
-
-      
+        – run: npm run lint
+        – run: npm run build     
